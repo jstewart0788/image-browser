@@ -4,13 +4,18 @@ import thunk from "redux-thunk";
 import { connectRouter, routerMiddleware } from "connected-react-router";
 import { composeWithDevTools } from "redux-devtools-extension";
 import globalReducers from "./Global";
+import { imageReducers } from "./Images";
 
 export const history = createBrowserHistory();
 
-const rootReducer = combineReducers({ global: globalReducers, router: connectRouter(history) });
+const rootReducer = combineReducers({
+  global: globalReducers,
+  images: imageReducers,
+  router: connectRouter(history)
+});
 
 export const store = createStore(
-  rootReducer, // top parent 
+  rootReducer, // top parent
   composeWithDevTools(
     applyMiddleware(
       routerMiddleware(history), // for dispatching history actions
