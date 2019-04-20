@@ -2,6 +2,13 @@ const path = require('path');
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+require('dotenv').config()
+
+
+mongoose.connect(`mongodb://${process.env.MONGO_USER_NAME}:${process.env.MONGO_PASSWORD}@ds237379.mlab.com:37379/heroku_q8z1vh85`, {useNewUrlParser: true});
+
 
 // const api = require('./routes/index');
 
