@@ -1,5 +1,9 @@
 const mongoose = require("mongoose");
+const _ = require("lodash");
+
 const training = require("./Training-Concepts");
+const fileNames = require("./loadFiles");
+
 require("dotenv").config();
 
 mongoose.connect(
@@ -12,7 +16,8 @@ mongoose.connect(
 const imageSchema = new mongoose.Schema({
   name: { type: String, required: true },
   tags: { type: [String], index: true },
-  customDesc: [String]
+  customDesc: [String],
+  createdAt: { type: Date, default: Date.now },
 });
 
 const Image = mongoose.model("Image", imageSchema);
@@ -22,10 +27,15 @@ const imageNames = Object.keys(training);
 
 for (let i = 0; i < imageNames.length; i++) {
   let name = imageNames[i];
-  images.push({ name, tags: training[name] });
+  if (_.includes(fileNames, name)) images.push({ name, tags: training[name] });
 }
 
-Image.create(images, (err, res) => {
-  if (err) console.log(err);
-  else console.log(res);
-});
+if (fileNames.length === images.length) {
+  Image.create(images, (err, res) => {
+    if (err) console.log(err);
+    else console.log(res);
+  });
+}
+else{
+  console.log("no match!");
+}

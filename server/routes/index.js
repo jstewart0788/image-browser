@@ -1,10 +1,7 @@
+const images = require("./images");
 
-module.exports = class Square {
-    constructor(width) {
-      this.width = width;
-    }
-  
-    area() {
-      return this.width ** 2;
-    }
-  };
+module.exports = class API {
+  static init(baseRoute, app, mongoose) {
+    images.init(baseRoute, app, mongoose);
+  }
+};
