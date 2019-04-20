@@ -1,33 +1,33 @@
-var express = require('express');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
+const path = require('path');
+const express = require('express');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
 
-var api = require('./routes/index');
+// const api = require('./routes/index');
 
-var app = express();
+const app = express();
 
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers",
-   "Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials");
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
+// view engine setup
+app.use(express.static('./build'));
+// app.use('/api/v1', api);
+
+//Serve Static Files
+app.use('*', function(req, res, next) {
+  console.log('HIT!');
+  res.sendFile(path.join(__dirname, './build', 'index.html'));
 });
 
-app.use('/api', api);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+// // catch 404 and forward to error handler
+// app.use(function(req, res, next) {
+//   const err = new Error('Not Found');
+//   err.status = 404;
+//   next(err);
+// });
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -44,5 +44,5 @@ app.use(function(err, req, res, next) {
  * Get port from environment and store in Express.
  */
 
-var port = process.env.PORT || '3001';
+const port = process.env.PORT || '3001';
 app.listen(port, () => console.log(`Server running on ${port}!`))
