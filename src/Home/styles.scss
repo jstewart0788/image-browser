@@ -1,0 +1,28 @@
+
+.image-container {
+  margin: 30px auto;
+  max-width: 90%;
+  border: 6px solid #caebf2;
+  padding: 16px;
+}
+
+.image-row {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  align-self: shrink;
+}
+
+.image-wrapper {
+  flex-basis: 400px;
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image {
+  max-width: 400px;
+  max-height: 400px;
+}

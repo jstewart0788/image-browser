@@ -1,0 +1,14 @@
+.modal-container{
+    text-align: center;
+    ul{
+        text-align: left;
+        font-weight: bold;
+        .tag-desc{
+            text-transform: capitalize;
+        }
+    }
+}
+
+.selected-image {
+  max-width: 100%;
+}
