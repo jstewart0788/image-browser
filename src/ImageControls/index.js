@@ -28,6 +28,7 @@ class Inspector extends PureComponent {
     await this.props.fetchAllImages();
     await this.props.fetchNumberOfImages();
     this.setState({
+      dataSource: Object.keys(Dictionary).slice(0, 10),
       value: ""
     });
   }
