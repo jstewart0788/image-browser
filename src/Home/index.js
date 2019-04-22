@@ -51,27 +51,34 @@ class Home extends PureComponent {
         <div className="image-container">
           <ImageControls handlePageChange={this.handlePageChange} page={page} />
           <div className="image-row">
-            {images
-              .sort((a, b) => a.createdAt - b.createdAt)
-              .map(image => (
-                <div key={image.name} className="image-wrapper">
-                  <Card
-                    hoverable
-                    onClick={this.selectImage.bind(null, image)}
-                    cover={
-                      <img
-                        className="image"
-                        src={`https://s3.amazonaws.com/imagebrowser.com/training-set/${
-                          image.name
-                        }.jpg`}
-                        alt={image.name}
-                      />
-                    }
-                  >
-                    <Card.Meta title={image.name} />
-                  </Card>
-                </div>
-              ))}
+            {images.length > 0 ? (
+              images
+                .sort((a, b) => a.createdAt - b.createdAt)
+                .map(image => (
+                  <div key={image.name} className="image-wrapper">
+                    <Card
+                      hoverable
+                      onClick={this.selectImage.bind(null, image)}
+                      cover={
+                        <img
+                          className="image"
+                          src={`https://s3.amazonaws.com/imagebrowser.com/training-set/${
+                            image.name
+                          }.jpg`}
+                          alt={image.name}
+                        />
+                      }
+                    >
+                      <Card.Meta title={image.name} />
+                    </Card>
+                  </div>
+                ))
+            ) : (
+              <div>
+                No images match the tag chosen. Please choose another tag or
+                clear the filter.
+              </div>
+            )}
           </div>
         </div>
         <Inspector open={this.state.modal} toggleModal={this.toggleModal} />
