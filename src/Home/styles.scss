@@ -1,9 +1,10 @@
+@import "../colors.scss";
 
 .image-container {
   margin: 30px auto;
   max-width: 90%;
-  border: 6px solid #caebf2;
-  padding: 16px;
+  border: 6px solid $sky;
+  padding: 0px;
 }
 
 .image-row {
@@ -12,6 +13,7 @@
   align-items: center;
   flex-wrap: wrap;
   align-self: shrink;
+  margin: 16px;
 }
 
 .image-wrapper {

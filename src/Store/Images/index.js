@@ -3,13 +3,17 @@ import { fetch } from "../../Shared/Utility/fetch";
 
 const defaultState = {
   selectedImage: null,
-  images: []
+  images: [],
+  count: 0,
+  filter: null
 };
 
 const base = "IMAGE/IMAGES";
 
 export const setImages = createAction(`${base}SET_IMAGES`);
+export const setCount = createAction(`${base}SET_COUNT`);
 export const selectImage = createAction(`${base}SELECT_IMAGE`);
+export const setFilter = createAction(`${base}SET_FILTER`);
 
 export const imageReducers = handleActions(
   {
@@ -20,13 +24,33 @@ export const imageReducers = handleActions(
     [selectImage]: (state, { payload }) => ({
       ...state,
       selectedImage: payload
+    }),
+    [setCount]: (state, { payload }) => ({
+      ...state,
+      count: payload
+    }),
+    [setFilter]: (state, { payload }) => ({
+      ...state,
+      filter: payload
     })
   },
   defaultState
 );
 
-export const fetchAllImages = (page = 1) => dispatch => {
-  return fetch(`api/v1/image?page=${page}`)
+export const fetchAllImages = (page = 1) => (dispatch, getState) => {
+  const {
+    images: { filter }
+  } = getState();
+  return fetch(`api/v1/image?page=${page}${filter? `&filter=${filter}` : ''}`)
     .then(({ data }) => dispatch(setImages(data)))
+    .catch(err => console.log(err));
+};
+
+export const fetchNumberOfImages = () => (dispatch, getState) => {
+  const {
+    images: { filter }
+  } = getState();
+  return fetch(`api/v1/image?count=1${filter? `&filter=${filter}` : ''}`)
+    .then(({ data: { count } }) => dispatch(setCount(count)))
     .catch(err => console.log(err));
 };

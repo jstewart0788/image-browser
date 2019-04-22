@@ -9,13 +9,24 @@ module.exports = class Image {
     this.model = mongoose.model("Image", this.schema);
   }
 
-  fetchAll(page) {
+  fetchAll(page, filter) {
+    console.log(filter);
+    const queryFilter = filter ? { tags: filter } : null;
     return this.model
-      .find(null, null, {sort:"-createdOn", limit: 20,  skip: 20 * (page - 1) })
+      .find(queryFilter, null, {
+        sort: "-createdOn",
+        limit: 20,
+        skip: 20 * (page - 1)
+      })
       .exec();
   }
 
   fetchOne(name) {
     return this.model.findOne({ name }).exec();
+  }
+
+  Count(filter) {
+    const queryFilter = filter ? { tags: filter } : {};
+    return this.model.count(queryFilter);
   }
 };

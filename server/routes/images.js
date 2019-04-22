@@ -5,8 +5,7 @@ module.exports = class Images {
     const image = new Image(mongoose);
 
     app.get(`${baseRoute}/image`, async (req, res, next) => {
-      const { name, page = 1 } = req.query;
-      console.log(req.query);
+      const { name, page, count, filter } = req.query;
       if (name) {
         image
           .fetchOne(name)
@@ -16,11 +15,20 @@ module.exports = class Images {
           .catch(next);
       } else if (page) {
         image
-          .fetchAll(page)
+          .fetchAll(page, filter)
           .then(images => {
             res.json(images);
           })
           .catch(next);
+      } else if (count) {
+        image
+          .Count(filter)
+          .then(number => {
+            res.json({ count: number });
+          })
+          .catch(next);
+      } else {
+        res.status(404).send("No Valid Query Paramaters!");
       }
     });
   }

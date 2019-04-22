@@ -1,0 +1,40 @@
+@import "../colors.scss";
+
+.image-controls {
+  background: $sky;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.clear-filter-btn {
+  margin-left: 50px;
+}
+
+.filter-wrapper {
+  padding: 2px 16px;
+}
+
+.filter.ant-select-auto-complete .ant-select-selection--single {
+  margin-right: -46px;
+}
+
+.filter.ant-select-auto-complete
+  .ant-input-affix-wrapper
+  .ant-input:not(:last-child) {
+  padding-right: 62px;
+}
+
+.filter.ant-select-auto-complete .ant-input-affix-wrapper .ant-input-suffix {
+  right: 0;
+}
+
+.filter.ant-select-auto-complete
+  .ant-input-affix-wrapper
+  .ant-input-suffix
+  button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}

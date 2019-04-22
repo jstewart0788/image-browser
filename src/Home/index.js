@@ -1,8 +1,13 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { Button, Card } from "antd";
-import { fetchAllImages, selectImage } from "../Store/Images";
+import {
+  fetchAllImages,
+  fetchNumberOfImages,
+  selectImage
+} from "../Store/Images";
 import Inspector from "../Inspector";
+import ImageControls from "../ImageControls";
 
 import "./styles.scss";
 
@@ -13,12 +18,13 @@ class Home extends PureComponent {
       page: 1,
       modal: false
     };
-    this.getNextPage = this.getNextPage.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
     this.selectImage = this.selectImage.bind(this);
   }
 
   componentDidMount() {
     this.props.fetchAllImages();
+    this.props.fetchNumberOfImages();
   }
 
   async selectImage(image) {
@@ -32,20 +38,18 @@ class Home extends PureComponent {
     }));
   };
 
-  getNextPage() {
-    const page = this.state.page + 1;
+  handlePageChange(page) {
     this.props.fetchAllImages(page);
     this.setState({ page });
   }
 
   render() {
     const { images } = this.props;
+    const { page } = this.state;
     return (
       <div className="Home">
-        {/* <button type="button" onClick={this.getNextPage}>
-          Next
-        </button> */}
         <div className="image-container">
+          <ImageControls handlePageChange={this.handlePageChange} page={page} />
           <div className="image-row">
             {images
               .sort((a, b) => a.createdAt - b.createdAt)
@@ -80,5 +84,5 @@ export default connect(
   state => ({
     images: state.images.images
   }),
-  { fetchAllImages, selectImage }
+  { fetchAllImages, selectImage, fetchNumberOfImages }
 )(Home);
