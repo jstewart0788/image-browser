@@ -10,7 +10,6 @@ module.exports = class Image {
   }
 
   fetchAll(page, filter) {
-    console.log(filter);
     const queryFilter = filter ? { tags: filter } : null;
     return this.model
       .find(queryFilter, null, {
