@@ -1,12 +1,15 @@
-.modal-container{
-    text-align: center;
-    ul{
-        text-align: left;
-        font-weight: bold;
-        .tag-desc{
-            text-transform: capitalize;
-        }
+.modal-container {
+  text-align: center;
+  ul {
+    text-align: left;
+    font-weight: bold;
+    .tag-desc {
+      text-transform: capitalize;
     }
+  }
+  button {
+    margin: 0px 8px;
+  }
 }
 
 .selected-image {
