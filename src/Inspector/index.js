@@ -1,7 +1,9 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { Modal, Button, Icon } from "antd";
+import _ from 'lodash';
 import Dictionary from "../Shared/Dictionary";
+import { updateOneAsync } from "../Store/Images";
 
 import "./styles.scss";
 
@@ -18,6 +20,7 @@ class Inspector extends PureComponent {
     this.state = {
       mode: MODES.DEFAULT
     };
+    this.removeTag = this.removeTag.bind(this);
   }
 
   setMode = mode => {
@@ -25,6 +28,12 @@ class Inspector extends PureComponent {
       mode
     });
   };
+
+  removeTag(tag) {
+    const newImage = _.cloneDeep(this.props.selectedImage);
+    newImage.tags.splice(newImage.tags.indexOf(tag), 1);
+    this.props.updateOneAsync(newImage);
+  }
 
   render() {
     const { selectedImage, open, toggleModal } = this.props;
@@ -43,7 +52,7 @@ class Inspector extends PureComponent {
             className="selected-image"
             src={`https://s3.amazonaws.com/imagebrowser.com/training-set/${
               selectedImage.name
-            }.jpg`}
+              }.jpg`}
             alt={selectedImage.name}
           />
           <h1>{selectedImage.name}</h1>
@@ -52,7 +61,7 @@ class Inspector extends PureComponent {
               <li key={`${tag}-${i}`}>
                 {tag} - <span className="tag-desc"> {Dictionary[tag]} </span>
                 {mode === MODES.DELETE_TAG && (
-                  <Button size="small" type="danger">
+                  <Button size="small" type="danger" onClick={this.removeTag.bind(null, tag)}>
                     <Icon type="close" />
                   </Button>
                 )}
@@ -87,6 +96,15 @@ class Inspector extends PureComponent {
                 </Button>
               </>
             )}
+            {mode !== MODES.DEFAULT && (
+              <Button
+                size="small"
+                type="primary"
+                onClick={this.setMode.bind(null, MODES.DEFAULT)}
+              >
+                Done <Icon type="check" />
+              </Button>
+            )}
           </div>
         </div>
       </Modal>
@@ -96,4 +114,4 @@ class Inspector extends PureComponent {
 
 export default connect(state => ({
   selectedImage: state.images.selectedImage
-}))(Inspector);
+}), { updateOneAsync })(Inspector);

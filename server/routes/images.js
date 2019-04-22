@@ -31,5 +31,15 @@ module.exports = class Images {
         res.status(404).send("No Valid Query Paramaters!");
       }
     });
+
+    app.put(`${baseRoute}/image`, async (req, res, next) => {
+      const doc = req.body.image
+      image
+        .updateOne(doc)
+        .then(() => {
+          res.json(doc);
+        })
+        .catch(next);
+    })
   }
 };

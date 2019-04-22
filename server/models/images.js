@@ -25,6 +25,10 @@ module.exports = class Image {
     return this.model.findOne({ name }).exec();
   }
 
+  updateOne(image) {
+    return this.model.updateOne({ _id: image['_id'] }, { tags: image.tags }).exec();
+  }
+
   Count(filter) {
     const queryFilter = filter ? { tags: filter } : {};
     return this.model.count(queryFilter);
