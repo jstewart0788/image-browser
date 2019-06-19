@@ -2,10 +2,15 @@ const path = require("path");
 const express = require("express");
 const logger = require("morgan");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const cookieEncrypter = require("cookie-encrypter");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
 const API = require("./routes/index");
+const VerifyJwt = require("./middleware/verifyJwt");
+const TokenHandler = require("./middleware/setToken");
+
 
 mongoose.connect(
   `mongodb://${process.env.MONGO_USER_NAME}:${
@@ -17,12 +22,19 @@ mongoose.connect(
 const app = express();
 const baseRoute = "/api/v1";
 
-app.use(logger("dev"));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+//Middleware
+app
+  .use(logger("dev"))
+  .use(bodyParser.json())
+  .use(bodyParser.urlencoded({ extended: false }))
+  .use(cookieParser(process.env.COOKIE_SECRET))
+  .use(cookieEncrypter(process.env.COOKIE_SECRET));
 
 // view engine setup
 app.use(express.static("./build"));
+
+//Security
+app.use(VerifyJwt.init).use(TokenHandler.init);
 
 //Initialize API Routes
 API.init(baseRoute, app, mongoose);
