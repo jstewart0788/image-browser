@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { Modal, Button, Icon } from "antd";
-import _ from 'lodash';
+import { Modal, Button, Icon, Input, Row, Col } from "antd";
+import _ from "lodash";
 import Dictionary from "../Shared/Dictionary";
 import { updateOneAsync } from "../Store/Images";
 
@@ -21,6 +21,7 @@ class Inspector extends PureComponent {
       mode: MODES.DEFAULT
     };
     this.removeTag = this.removeTag.bind(this);
+    this.toggleModalMeta = this.toggleModalMeta.bind(this);
   }
 
   setMode = mode => {
@@ -35,15 +36,20 @@ class Inspector extends PureComponent {
     this.props.updateOneAsync(newImage);
   }
 
+  toggleModalMeta() {
+    this.props.toggleModal();
+    this.setState({ mode: MODES.DEFAULT });
+  }
+
   render() {
-    const { selectedImage, open, toggleModal } = this.props;
+    const { selectedImage, open } = this.props;
     const { mode } = this.state;
 
     return selectedImage ? (
       <Modal
         title="Image Inspector"
         visible={open}
-        onCancel={toggleModal}
+        onCancel={this.toggleModalMeta}
         footer={null}
         width="max-content"
       >
@@ -52,7 +58,7 @@ class Inspector extends PureComponent {
             className="selected-image"
             src={`https://s3.amazonaws.com/imagebrowser.com/training-set/${
               selectedImage.name
-              }.jpg`}
+            }.jpg`}
             alt={selectedImage.name}
           />
           <h1>{selectedImage.name}</h1>
@@ -61,15 +67,26 @@ class Inspector extends PureComponent {
               <li key={`${tag}-${i}`}>
                 {tag} - <span className="tag-desc"> {Dictionary[tag]} </span>
                 {mode === MODES.DELETE_TAG && (
-                  <Button size="small" type="danger" onClick={this.removeTag.bind(null, tag)}>
+                  <Button
+                    size="small"
+                    type="danger"
+                    onClick={this.removeTag.bind(null, tag)}
+                  >
                     <Icon type="close" />
                   </Button>
                 )}
               </li>
             ))}
-            {mode === MODES.NEW_TAG &&
-              <li> test</li>
-            }
+            {mode === MODES.NEW_TAG && (
+              <Row>
+                <Col span={8}>
+                  <li>
+                    <Input size="small" placeholder="small size" />
+                  </li>
+                </Col>
+                <Col span={16} />
+              </Row>
+            )}
           </ul>
           <div className="action-bar">
             {mode === MODES.DEFAULT && (
@@ -112,6 +129,9 @@ class Inspector extends PureComponent {
   }
 }
 
-export default connect(state => ({
-  selectedImage: state.images.selectedImage
-}), { updateOneAsync })(Inspector);
+export default connect(
+  state => ({
+    selectedImage: state.images.selectedImage
+  }),
+  { updateOneAsync }
+)(Inspector);
