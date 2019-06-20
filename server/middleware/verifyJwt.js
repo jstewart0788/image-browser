@@ -9,7 +9,7 @@ module.exports = class VerifyJwt {
         : null;
     if (
       !req.path.startsWith("/api") ||
-      req.path === "/api/v1/user" ||
+      (req.path === "/api/v1/user" && req.method === "POST") ||
       req.path === "/api/v1/user/login"
     ) {
       next();
