@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { Button, Card } from "antd";
+import { Card } from "antd";
 import {
   fetchAllImages,
   fetchNumberOfImages,

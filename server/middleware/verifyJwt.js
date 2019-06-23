@@ -15,10 +15,9 @@ module.exports = class VerifyJwt {
       next();
     } else if (authToken) {
       try {
-        const { userName, email } = jwt.verify(
-          authToken,
-          process.env.JWT_SECRET
-        );
+        const {
+          user: { userName, email }
+        } = jwt.verify(authToken, process.env.JWT_SECRET);
         req.user = {
           userName,
           email
@@ -28,7 +27,7 @@ module.exports = class VerifyJwt {
       }
       next();
     } else {
-      throw new Error(401, { message: "No token found." });
+      res.status(401).json("No token found.");
     }
   }
 };

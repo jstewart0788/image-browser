@@ -9,7 +9,6 @@ require("dotenv").config();
 
 const API = require("./routes/index");
 const VerifyJwt = require("./middleware/verifyJwt");
-const TokenHandler = require("./middleware/setToken");
 
 
 mongoose.connect(
@@ -34,7 +33,7 @@ app
 app.use(express.static("./build"));
 
 //Security
-app.use(VerifyJwt.init).use(TokenHandler.init);
+app.use(VerifyJwt.init);
 
 //Initialize API Routes
 API.init(baseRoute, app, mongoose);

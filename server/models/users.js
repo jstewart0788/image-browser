@@ -1,9 +1,10 @@
 module.exports = class Users {
   constructor(mongoose) {
     this.schema = mongoose.Schema({
-      userName: { type: String, required: true, unique : true },
-      email: { type: String, required: true, unique : true },
+      userName: { type: String, required: true, unique: true },
+      email: { type: String, required: true, unique: true },
       password: { type: String, required: true },
+      roles: [String]
     });
 
     this.model = mongoose.model("User", this.schema);
@@ -13,7 +14,7 @@ module.exports = class Users {
     return this.model.findOne({ userName }).exec();
   }
 
-  InsertOne(user){
+  InsertOne(user) {
     return this.model.create(user);
   }
 };
