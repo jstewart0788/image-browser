@@ -28,7 +28,7 @@
     "redux-devtools-extension": "^2.13.7",
     "redux-thunk": "^2.3.0"
   },
-  "proxy": "http://localhost:3005",
+  "proxy": "http://localhost:3001",
   "scripts": {
     "watch": "nodemon server/index.js",
     "start": "react-scripts start",
