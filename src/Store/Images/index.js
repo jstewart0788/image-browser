@@ -1,6 +1,5 @@
 import { createAction, handleActions } from "redux-actions";
-import { restVerbs, fetch } from "../../Shared/Utility/fetch";
-
+import { restVerbs, fetch, errorHandler } from "../../Shared/Utility/fetch";
 
 const defaultState = {
   selectedImage: null,
@@ -49,22 +48,22 @@ export const fetchAllImages = (page = 1) => (dispatch, getState) => {
   const {
     images: { filter }
   } = getState();
-  return fetch(`api/v1/image?page=${page}${filter ? `&filter=${filter}` : ''}`)
+  return fetch(`api/v1/image?page=${page}${filter ? `&filter=${filter}` : ""}`)
     .then(({ data }) => dispatch(setImages(data)))
-    .catch(err => console.log(err));
+    .catch(err => errorHandler(err));
 };
 
 export const fetchNumberOfImages = () => (dispatch, getState) => {
   const {
     images: { filter }
   } = getState();
-  return fetch(`api/v1/image?count=1${filter ? `&filter=${filter}` : ''}`)
+  return fetch(`api/v1/image?count=1${filter ? `&filter=${filter}` : ""}`)
     .then(({ data: { count } }) => dispatch(setCount(count)))
-    .catch(err => console.log(err));
+    .catch(err => errorHandler(err));
 };
 
-export const updateOneAsync = (image) => dispatch => {
+export const updateOneAsync = image => dispatch => {
   return fetch(`api/v1/image`, restVerbs.PUT, { image })
     .then(({ data }) => dispatch(updateOne(data)))
-    .catch(err => console.log(err));
+    .catch(err => errorHandler(err));
 };
