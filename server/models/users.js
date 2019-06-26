@@ -1,10 +1,17 @@
 module.exports = class Users {
   constructor(mongoose) {
     this.schema = mongoose.Schema({
-      userName: { type: String, required: true, unique: true },
-      email: { type: String, required: true, unique: true },
+      userName: { type: String, required: true, unique: [true, 'Username in use.'] },
+      email: { type: String, required: true, unique: [true, 'Emaill already assosiated to an account.'] },
       password: { type: String, required: true },
-      roles: [String]
+      roles: [
+        {
+          type: String,
+          enum: ["user", "admin"],
+          required: true,
+          default: "user"
+        }
+      ]
     });
 
     this.model = mongoose.model("User", this.schema);

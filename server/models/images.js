@@ -2,8 +2,9 @@ module.exports = class Image {
   constructor(mongoose) {
     this.schema = mongoose.Schema({
       name: { type: String, required: true },
-      tags: { type: [String], index: true },
-      customDesc: [String]
+      description: String,
+      tags: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tag",  index: true }],
+      postedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     });
 
     this.model = mongoose.model("Image", this.schema);
