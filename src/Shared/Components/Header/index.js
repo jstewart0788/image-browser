@@ -1,8 +1,24 @@
 import React from "react";
-import { PageHeader } from "antd";
+import { withRouter } from "react-router"; // react-router v4
+import { PageHeader, Icon, Tooltip } from "antd";
 
-import './styles.scss'
+import "./styles.scss";
 
-const Header = () => <PageHeader className="header" title="Medical Image Brower" />;
+const Header = props => (
+  <PageHeader
+    className="header"
+    title="Medical Image Brower"
+    extra={
+      <Tooltip title="Switch Users" placement="bottomRight">
+        <Icon
+          onClick={() => {
+            props.history.push("/login");
+          }}
+          type="logout"
+        />
+      </Tooltip>
+    }
+  />
+);
 
-export default Header;
+export default withRouter(Header);

@@ -14,7 +14,6 @@ class App extends PureComponent {
       user,
       history: { push }
     } = this.props;
-    console.log("Rendered", !!user)
     if (!user) {
       this.props.fetchUser(push);
       return <div />;
