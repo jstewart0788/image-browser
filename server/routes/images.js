@@ -1,4 +1,6 @@
-const Image = require("../models/images");
+const Image = require("../models/imagesv2");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 module.exports = class Images {
   static init(baseRoute, app, mongoose) {
@@ -33,13 +35,19 @@ module.exports = class Images {
     });
 
     app.put(`${baseRoute}/image`, async (req, res, next) => {
-      const doc = req.body.image
+      const doc = req.body.image;
       image
         .updateOne(doc)
         .then(() => {
           res.json(doc);
         })
         .catch(next);
-    })
+    });
+
+    app.post(`${baseRoute}/image`, async (req, res, next) => {
+      console.log("Body", req.body);
+      console.log("files", req);
+      res.json({ msg: "yo" });
+    });
   }
 };

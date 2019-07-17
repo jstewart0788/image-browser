@@ -20,6 +20,7 @@ class Login extends PureComponent {
     this.handleLogin = this.handleLogin.bind(this);
     this.handleRegister = this.handleRegister.bind(this);
     this.toggleRegister = this.toggleRegister.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   handleLogin = () => {
@@ -32,6 +33,12 @@ class Login extends PureComponent {
       }
     });
   };
+
+  handleKeyPress(e, mode) {
+    if (e.key === "Enter" && mode === loginState.LOGIN) this.handleLogin();
+    if (e.key === "Enter" && mode === loginState.REGISTER)
+      this.handleRegister();
+  }
 
   handleRegister = () => {
     const {
@@ -81,7 +88,10 @@ class Login extends PureComponent {
     const { getFieldDecorator, resetFields } = this.props.form;
     const { state } = this.state;
     return state === loginState.LOGIN ? (
-      <Form className="login-form">
+      <Form
+        className="login-form"
+        onKeyPress={e => this.handleKeyPress(e, loginState.LOGIN)}
+      >
         <Card
           title={state === loginState.LOGIN ? "Login" : "Register"}
           id="login"
@@ -129,7 +139,10 @@ class Login extends PureComponent {
         </Card>
       </Form>
     ) : (
-      <Form className="login-form">
+      <Form
+        className="login-form"
+        onKeyPress={e => this.handleKeyPress(e, loginState.REGISTER)}
+      >
         <Card
           title={state === loginState.LOGIN ? "Login" : "Register"}
           id="login"

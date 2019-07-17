@@ -53,7 +53,7 @@ class Inspector extends PureComponent {
         footer={null}
         width="max-content"
       >
-        <div className="modal-container">
+        <div className="inspector">
           <img
             className="selected-image"
             src={`https://s3.amazonaws.com/imagebrowser.com/training-set/${
