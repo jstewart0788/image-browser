@@ -7,6 +7,7 @@ import {
   selectImage
 } from "../Store/Images";
 import Inspector from "../Inspector";
+import Uploader from "../Uploader";
 import ImageControls from "../ImageControls";
 
 import "./styles.scss";
@@ -82,6 +83,7 @@ class Home extends PureComponent {
           </div>
         </div>
         <Inspector open={this.state.modal} toggleModal={this.toggleModal} />
+        <Uploader />
       </div>
     );
   }

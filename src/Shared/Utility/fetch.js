@@ -7,14 +7,19 @@ export const restVerbs = {
   DELETE: "DELETE"
 };
 
-export const fetchConfig = async (url, method, body) => {
+export const fetchConfig = async (
+  url,
+  method,
+  body,
+  contentType = "application/json"
+) => {
   const base = {
     url,
     method: (method || restVerbs.GET).toLowerCase(),
     data: method !== restVerbs.GET ? body || {} : undefined,
     params: method === restVerbs.GET ? body || {} : undefined,
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": contentType
     }
   };
   if (!method || method === restVerbs.get || method === restVerbs.DELETE)
