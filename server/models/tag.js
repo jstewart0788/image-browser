@@ -1,31 +1,27 @@
 module.exports = class Tag {
-    constructor(mongoose) {
-      this.schema = mongoose.Schema({
-        code: { type: String, required: [true, 'No code inserted'] },
-        description: { type: String, index: true },
-        count: { type: Number, required: true, default: 0 }
-      });
   
-      this.model = mongoose.model("Tag", this.schema);
-    }
-  
-    // fetchAll(page, filter) {
-    //   const queryFilter = filter ? { tags: filter } : null;
-    //   return this.model
-    //     .find(queryFilter, null, {
-    //       sort: "-createdOn",
-    //       limit: 20,
-    //       skip: 20 * (page - 1)
-    //     })
-    //     .exec();
-    // }
-  
-    // fetchOne(name) {
-    //   return this.model.findOne({ name }).exec();
-    // }
-  
-    // updateOne(image) {
-    //   return this.model.updateOne({ _id: image['_id'] }, { tags: image.tags }).exec();
-    // }
-  };
-  
+  constructor(mongoose) {
+    this.schema = mongoose.Schema({
+      code: {
+        unique: true,
+        type: String,
+        required: [true, "No code inserted"],
+        index: true
+      },
+      description: { type: String }
+    });
+
+    this.model = mongoose.model("Tag", this.schema);
+  }
+
+  fetchOne(code) {
+    return this.model.findOne({ code }).exec();
+  }
+
+  insertMany(tags, res) {
+    this.model.insertMany(tags, err => {
+      if (err) res.status(500).json({ msg: "Failed to create tags" });
+      else res.json({ msg: "Succesfully created tags" });
+    });
+  }
+};

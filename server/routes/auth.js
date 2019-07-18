@@ -16,7 +16,8 @@ module.exports = class Auth {
           if (userName) {
             const userObj = {
               userName,
-              email
+              email,
+              id: user._id
             };
             const isMatch = await checkUser(password, storedPassword);
             if (isMatch) {

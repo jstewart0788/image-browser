@@ -1,5 +1,6 @@
 const Image = require("../models/imagesv2");
 const multer = require("multer");
+
 const upload = multer({ dest: "uploads/" });
 
 module.exports = class Images {
@@ -44,10 +45,8 @@ module.exports = class Images {
         .catch(next);
     });
 
-    app.post(`${baseRoute}/image`, async (req, res, next) => {
-      console.log("Body", req.body);
-      console.log("files", req);
-      res.json({ msg: "yo" });
+    app.post(`${baseRoute}/image`, upload.any(), async (req, res) => {
+      image.uploadMany(req.files, req.user.id, res);
     });
   }
 };
