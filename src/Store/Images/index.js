@@ -5,11 +5,11 @@ const defaultState = {
   selectedImage: null,
   images: [],
   count: 0,
-  filter: null,
+  filter: [],
   uploaderOpen: false
 };
 
-const base = "IMAGE/IMAGES";
+const base = "IMAGES/";
 
 export const setImages = createAction(`${base}SET_IMAGES`);
 export const setCount = createAction(`${base}SET_COUNT`);
@@ -39,7 +39,6 @@ export const imageReducers = handleActions(
     }),
     [updateOne]: (state, { payload }) => ({
       ...state,
-      images: state.images,
       selectedImage: payload
     }),
     [toggleUploader]: state => ({

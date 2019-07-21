@@ -34,17 +34,6 @@ module.exports = class Images {
       }
     });
 
-    app.get(`${baseRoute}/image/static`, async (req, res, next) => {
-      const { name } = req.query;
-      image
-        .fetchOne(name)
-        .then(image => {
-          res.contentType(image.contentType);
-          res.send(image.img);
-        })
-        .catch(next);
-    });
-
     app.put(`${baseRoute}/image`, async (req, res, next) => {
       const doc = req.body.image;
       image

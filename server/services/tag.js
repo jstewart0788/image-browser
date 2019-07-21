@@ -1,13 +1,8 @@
 const Tag = require("../models/tag");
 
 module.exports = class TagServcie {
-  fetchAll(page, filter) {
-    const queryFilter = filter ? { tags: filter } : null;
-    return Tag.find(queryFilter, null, {
-      sort: "-createdOn",
-      limit: 20,
-      skip: 20 * (page - 1)
-    }).exec();
+  fetchAll() {
+    return Tag.find({}).exec();
   }
 
   async getIdsByCode(name) {

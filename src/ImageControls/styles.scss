@@ -9,32 +9,9 @@
   padding: 20px;
 }
 
-.clear-filter-btn {
-  margin-left: 50px;
-}
-
-.filter-wrapper {
-  padding: 2px 50px 5px 0px;
-}
-
-.filter.ant-select-auto-complete .ant-select-selection--single {
-  margin-right: -46px;
-}
-
-.filter.ant-select-auto-complete
-  .ant-input-affix-wrapper
-  .ant-input:not(:last-child) {
-  padding-right: 62px;
-}
-
-.filter.ant-select-auto-complete .ant-input-affix-wrapper .ant-input-suffix {
-  right: 0;
-}
-
-.filter.ant-select-auto-complete
-  .ant-input-affix-wrapper
-  .ant-input-suffix
-  button {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+.clear-btn-wrapper {
+  margin-left: 35px;
+  .clear-filter-btn {
+    margin-left: 6px;
+  }
 }
