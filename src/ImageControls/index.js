@@ -42,16 +42,18 @@ class Inspector extends PureComponent {
           placeholder="Filter Images"
           handleSelection={this.handleSelection}
         />
-        {filter.map(item => (
-          <Button
-            className="clear-filter-btn"
-            size="large"
-            type="danger"
-            onClick={this.clearFilter.bind(null, item)}
-          >
-            {item} <Icon type="close" />
-          </Button>
-        ))}
+        <div className="clear-btn-wrapper">
+          {filter.map(item => (
+            <Button
+              className="clear-filter-btn"
+              size="large"
+              type="danger"
+              onClick={this.clearFilter.bind(null, item)}
+            >
+              {item} <Icon type="close" />
+            </Button>
+          ))}
+        </div>
         <span className="stretch" />
         <Pagination
           current={page}

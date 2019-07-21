@@ -9,6 +9,9 @@
   padding: 20px;
 }
 
-.clear-filter-btn {
-  margin-left: 50px;
+.clear-btn-wrapper {
+  margin-left: 35px;
+  .clear-filter-btn {
+    margin-left: 6px;
+  }
 }
