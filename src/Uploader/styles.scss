@@ -18,6 +18,10 @@
         font-size: 1rem;
       }
     }
+
+    &.upload-ready {
+      border: 1px solid #52c41a;
+    }
   }
   input[type="file"] {
     opacity: 0;
@@ -26,5 +30,36 @@
     // alternative to pointer-events, compatible with all browsers, just make it impossible to find
     width: 1px;
     height: 1px;
+  }
+  .confirmation {
+    margin: 20px 50px;
+    font-size: 1.3rem;
+
+    .bottom-form{
+      display: flex;
+      flex-direction: column;
+      textarea{
+        margin: 20px 0px;
+      }
+    }
+    .file-list-item {
+      margin: 10px 0px;
+      display: flex;
+    }
+    .text {
+      line-height: 20px;
+    }
+    i {
+      padding-right: 6px;
+      &.plus {
+        color: #52c41a;
+      }
+      &.cross {
+        color: red;
+        font-size: 0.9rem;
+        margin-left: 3px;
+        cursor: pointer;
+      }
+    }
   }
 }

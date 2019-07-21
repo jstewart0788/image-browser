@@ -74,9 +74,11 @@ export const updateOneAsync = image => dispatch => {
     .catch(err => errorHandler(err));
 };
 
-export const uploadMultipleImages = files => dispatch => {
-  console.log("hit", files);
+export const uploadMultipleImages = (files, handleCancle) => dispatch => {
   return fetch(`api/v1/image`, restVerbs.POST, files, "multipart/form-data")
-    .then(({ data }) => console.log(data))
+    .then(() => {
+      handleCancle();
+      dispatch(fetchAllImages());
+    })
     .catch(err => errorHandler(err));
 };

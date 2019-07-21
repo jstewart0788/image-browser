@@ -44,6 +44,13 @@ class Home extends PureComponent {
     this.setState({ page });
   }
 
+  arrayBufferToBase64(buffer) {
+    var binary = "";
+    var bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach(b => (binary += String.fromCharCode(b)));
+    return window.btoa(binary);
+  }
+
   render() {
     const { images } = this.props;
     const { page } = this.state;
@@ -55,25 +62,28 @@ class Home extends PureComponent {
             {images.length > 0 ? (
               images
                 .sort((a, b) => a.createdAt - b.createdAt)
-                .map(image => (
-                  <div key={image.name} className="image-wrapper">
-                    <Card
-                      hoverable
-                      onClick={this.selectImage.bind(null, image)}
-                      cover={
-                        <img
-                          className="image"
-                          src={`https://s3.amazonaws.com/imagebrowser.com/training-set/${
-                            image.name
-                          }.jpg`}
-                          alt={image.name}
-                        />
-                      }
-                    >
-                      <Card.Meta title={image.name} />
-                    </Card>
-                  </div>
-                ))
+                .map(image => {
+                  const base64Flag = `data:${image.img.contentType};base64,`;
+                  var imageStr = this.arrayBufferToBase64(image.img.data.data);
+                  const imageSrc = base64Flag + imageStr;
+                  return (
+                    <div key={image.name} className="image-wrapper">
+                      <Card
+                        hoverable
+                        onClick={this.selectImage.bind(null, image)}
+                        cover={
+                          <img
+                            className="image"
+                            src={imageSrc}
+                            alt={image.name}
+                          />
+                        }
+                      >
+                        <Card.Meta title={image.name} />
+                      </Card>
+                    </div>
+                  );
+                })
             ) : (
               <div>
                 No images match the tag chosen. Please choose another tag or
