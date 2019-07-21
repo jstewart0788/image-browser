@@ -6,6 +6,7 @@ import {
   fetchNumberOfImages,
   selectImage
 } from "../Store/Images";
+import { fetchAllTags } from "../Store/Tags";
 import Inspector from "../Inspector";
 import Uploader from "../Uploader";
 import ImageControls from "../ImageControls";
@@ -27,6 +28,7 @@ class Home extends PureComponent {
   componentDidMount() {
     this.props.fetchAllImages();
     this.props.fetchNumberOfImages();
+    this.props.fetchAllTags();
   }
 
   async selectImage(image) {
@@ -100,5 +102,5 @@ export default connect(
   state => ({
     images: state.images.images
   }),
-  { fetchAllImages, selectImage, fetchNumberOfImages }
+  { fetchAllImages, selectImage, fetchNumberOfImages, fetchAllTags }
 )(Home);

@@ -5,6 +5,15 @@ module.exports = class Images {
   static init(baseRoute, app, mongoose) {
     const tag = new Tag();
 
+    app.get(`${baseRoute}/tag`, async (req, res, next) => {
+      tag
+        .fetchAll()
+        .then(tags => {
+          res.json(tags);
+        })
+        .catch(next);
+    });
+
     app.post(`${baseRoute}/tag`, async (req, res, next) => {
       const tags = [];
       Object.keys(dic).map(code => {

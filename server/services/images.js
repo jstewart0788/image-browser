@@ -15,7 +15,7 @@ module.exports = class ImageService {
   }
 
   fetchAll(page, filter) {
-    const queryFilter = filter ? { tags: filter } : null;
+    const queryFilter = filter ? { codes: filter } : null;
     return Image.find(queryFilter, null, {
       sort: "-createdOn",
       limit: 20,
