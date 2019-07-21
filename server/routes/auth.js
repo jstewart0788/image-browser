@@ -1,22 +1,21 @@
 const jwt = require("jsonwebtoken");
 
 const { encrypt, checkUser } = require("../utils/auth");
-const User = require("../models/users");
+const User = require("../services/users");
 
 module.exports = class Auth {
-  static init(baseRoute, app, mongoose) {
-    const user = new User(mongoose);
-
+  static init(baseRoute, app) {
+    const user = new User();
     app.post(`${baseRoute}/user/login`, async (req, res) => {
       const { userName, password } = req.body;
-      await user
-        .fetchOne(userName)
+      await user.fetchOne(userName)
         .then(async user => {
           const { userName, email, password: storedPassword } = user || {};
           if (userName) {
             const userObj = {
               userName,
-              email
+              email,
+              id: user._id
             };
             const isMatch = await checkUser(password, storedPassword);
             if (isMatch) {
@@ -47,8 +46,7 @@ module.exports = class Auth {
       const { userName, password, email } = req.body;
       const hash = await encrypt(password);
 
-      await user
-        .InsertOne({ userName, email, password: hash })
+      await user.InsertOne({ userName, email, password: hash })
         .then(result => {
           res.json({ id: result.id });
         })

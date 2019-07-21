@@ -1,39 +1,27 @@
-module.exports = class Image {
-  constructor(mongoose) {
-    this.schema = mongoose.Schema({
-      name: { type: String, required: true },
-      img: { data: Buffer, contentType: String },
-      description: String,
-      tags: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tag", index: true }],
-      postedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
-    });
+const mongoose = require("mongoose");
 
-    this.model = mongoose.model("Imagev2", this.schema);
-  }
+const schema = mongoose.Schema({
+  name: { type: String, required: true },
+  img: { data: Buffer, contentType: String },
+  description: String,
+  codes: [String],
+  postedBy: String
+});
 
-  fetchAll(page, filter) {
-    const queryFilter = filter ? { tags: filter } : null;
-    return this.model
-      .find(queryFilter, null, {
-        sort: "-createdOn",
-        limit: 20,
-        skip: 20 * (page - 1)
-      })
-      .exec();
-  }
+schema.virtual("tags", {
+  ref: "Tag",
+  localField: "codes",
+  foreignField: "code",
+  justOne: false // for many-to-1 relationships
+});
 
-  fetchOne(name) {
-    return this.model.findOne({ name }).exec();
-  }
+schema.virtual("user", {
+  ref: "User",
+  localField: "postedBy",
+  foreignField: "userName",
+  justOne: true // for many-to-1 relationships
+});
 
-  updateOne(image) {
-    return this.model
-      .updateOne({ _id: image["_id"] }, { tags: image.tags })
-      .exec();
-  }
+const model = mongoose.model("Imagev2", schema);
 
-  Count(filter) {
-    const queryFilter = filter ? { tags: filter } : {};
-    return this.model.count(queryFilter);
-  }
-};
+module.exports = model;

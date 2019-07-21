@@ -16,11 +16,12 @@ module.exports = class VerifyJwt {
     } else if (authToken) {
       try {
         const {
-          user: { userName, email }
+          user: { userName, email, id }
         } = jwt.verify(authToken, process.env.JWT_SECRET);
         req.user = {
           userName,
-          email
+          email,
+          id
         };
       } catch (err) {
         throw new Error(401, { message: "Not authorized." });

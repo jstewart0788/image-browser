@@ -36,7 +36,7 @@ app.use(express.static("./build"));
 app.use(VerifyJwt.init);
 
 //Initialize API Routes
-API.init(baseRoute, app, mongoose);
+API.init(baseRoute, app);
 
 //Serve Static Files
 app.use("*", function(req, res, next) {

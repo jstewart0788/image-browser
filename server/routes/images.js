@@ -1,11 +1,11 @@
-const Image = require("../models/imagesv2");
+const Image = require("../services/images");
 const multer = require("multer");
+
 const upload = multer({ dest: "uploads/" });
 
 module.exports = class Images {
-  static init(baseRoute, app, mongoose) {
-    const image = new Image(mongoose);
-
+  static init(baseRoute, app) {
+    const image = new Image();
     app.get(`${baseRoute}/image`, async (req, res, next) => {
       const { name, page, count, filter } = req.query;
       if (name) {
@@ -34,6 +34,17 @@ module.exports = class Images {
       }
     });
 
+    app.get(`${baseRoute}/image/static`, async (req, res, next) => {
+      const { name } = req.query;
+      image
+        .fetchOne(name)
+        .then(image => {
+          res.contentType(image.contentType);
+          res.send(image.img);
+        })
+        .catch(next);
+    });
+
     app.put(`${baseRoute}/image`, async (req, res, next) => {
       const doc = req.body.image;
       image
@@ -44,10 +55,8 @@ module.exports = class Images {
         .catch(next);
     });
 
-    app.post(`${baseRoute}/image`, async (req, res, next) => {
-      console.log("Body", req.body);
-      console.log("files", req);
-      res.json({ msg: "yo" });
+    app.post(`${baseRoute}/image`, upload.any(), async (req, res) => {
+      image.uploadMany(req, res);
     });
   }
 };
