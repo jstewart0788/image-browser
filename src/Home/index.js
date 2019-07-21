@@ -9,6 +9,7 @@ import {
 import Inspector from "../Inspector";
 import Uploader from "../Uploader";
 import ImageControls from "../ImageControls";
+import { arrayBufferToBase64 } from "../Shared/Utility/buffer";
 
 import "./styles.scss";
 
@@ -44,13 +45,6 @@ class Home extends PureComponent {
     this.setState({ page });
   }
 
-  arrayBufferToBase64(buffer) {
-    var binary = "";
-    var bytes = [].slice.call(new Uint8Array(buffer));
-    bytes.forEach(b => (binary += String.fromCharCode(b)));
-    return window.btoa(binary);
-  }
-
   render() {
     const { images } = this.props;
     const { page } = this.state;
@@ -64,7 +58,7 @@ class Home extends PureComponent {
                 .sort((a, b) => a.createdAt - b.createdAt)
                 .map(image => {
                   const base64Flag = `data:${image.img.contentType};base64,`;
-                  var imageStr = this.arrayBufferToBase64(image.img.data.data);
+                  var imageStr = arrayBufferToBase64(image.img.data.data);
                   const imageSrc = base64Flag + imageStr;
                   return (
                     <div key={image.name} className="image-wrapper">
@@ -79,7 +73,10 @@ class Home extends PureComponent {
                           />
                         }
                       >
-                        <Card.Meta title={image.name} />
+                        <Card.Meta
+                          title={image.name}
+                          description={image.description}
+                        />
                       </Card>
                     </div>
                   );

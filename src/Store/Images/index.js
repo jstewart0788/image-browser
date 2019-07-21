@@ -39,7 +39,6 @@ export const imageReducers = handleActions(
     }),
     [updateOne]: (state, { payload }) => ({
       ...state,
-      images: state.images,
       selectedImage: payload
     }),
     [toggleUploader]: state => ({

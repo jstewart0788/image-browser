@@ -4,6 +4,7 @@ import { Modal, Button, Icon, Input, Row, Col } from "antd";
 import _ from "lodash";
 import Dictionary from "../Shared/Dictionary";
 import { updateOneAsync } from "../Store/Images";
+import { arrayBufferToBase64 } from "../Shared/Utility/buffer";
 
 import "./styles.scss";
 
@@ -18,10 +19,20 @@ class Inspector extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      mode: MODES.DEFAULT
+      mode: MODES.DEFAULT,
+      imageSrc: null
     };
     this.removeTag = this.removeTag.bind(this);
     this.toggleModalMeta = this.toggleModalMeta.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { selectedImage } = this.props;
+    if (prevProps.selectedImage != selectedImage && selectedImage) {
+      const base64Flag = `data:${selectedImage.img.contentType};base64,`;
+      const imageStr = arrayBufferToBase64(selectedImage.img.data.data);
+      this.setState({ imageSrc: base64Flag + imageStr });
+    }
   }
 
   setMode = mode => {
@@ -43,7 +54,7 @@ class Inspector extends PureComponent {
 
   render() {
     const { selectedImage, open } = this.props;
-    const { mode } = this.state;
+    const { mode, imageSrc} = this.state;
 
     return selectedImage ? (
       <Modal
@@ -56,14 +67,12 @@ class Inspector extends PureComponent {
         <div className="inspector">
           <img
             className="selected-image"
-            src={`https://s3.amazonaws.com/imagebrowser.com/training-set/${
-              selectedImage.name
-            }.jpg`}
+            src={imageSrc}
             alt={selectedImage.name}
           />
           <h1>{selectedImage.name}</h1>
           <ul>
-            {selectedImage.tags.map((tag, i) => (
+            {selectedImage.codes.map((tag, i) => (
               <li key={`${tag}-${i}`}>
                 {tag} - <span className="tag-desc"> {Dictionary[tag]} </span>
                 {mode === MODES.DELETE_TAG && (
