@@ -5,6 +5,7 @@ import _ from "lodash";
 import Dictionary from "../Shared/Dictionary";
 import { updateOneAsync } from "../Store/Images";
 import { arrayBufferToBase64 } from "../Shared/Utility/buffer";
+import TagSearch from "../Shared/Components/TagSearch";
 
 import "./styles.scss";
 
@@ -24,6 +25,7 @@ class Inspector extends PureComponent {
     };
     this.removeTag = this.removeTag.bind(this);
     this.toggleModalMeta = this.toggleModalMeta.bind(this);
+    this.handleAddTag = this.handleAddTag.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -43,7 +45,7 @@ class Inspector extends PureComponent {
 
   removeTag(tag) {
     const newImage = _.cloneDeep(this.props.selectedImage);
-    newImage.tags.splice(newImage.tags.indexOf(tag), 1);
+    newImage.codes.splice(newImage.codes.indexOf(tag), 1);
     this.props.updateOneAsync(newImage);
   }
 
@@ -52,9 +54,15 @@ class Inspector extends PureComponent {
     this.setState({ mode: MODES.DEFAULT });
   }
 
+  handleAddTag(tag) {
+    const newImage = _.cloneDeep(this.props.selectedImage);
+    newImage.codes.push(tag);
+    this.props.updateOneAsync(newImage);
+  }
+
   render() {
     const { selectedImage, open } = this.props;
-    const { mode, imageSrc} = this.state;
+    const { mode, imageSrc } = this.state;
 
     return selectedImage ? (
       <Modal
@@ -90,7 +98,11 @@ class Inspector extends PureComponent {
               <Row>
                 <Col span={8}>
                   <li>
-                    <Input size="small" placeholder="small size" />
+                    <TagSearch
+                      size="small"
+                      placeholder="Search for Tag to add"
+                      handleSelection={this.handleAddTag}
+                    />
                   </li>
                 </Col>
                 <Col span={16} />

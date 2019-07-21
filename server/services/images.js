@@ -28,7 +28,7 @@ module.exports = class ImageService {
   }
 
   updateOne(image) {
-    return Image.updateOne({ _id: image["_id"] }, { tags: image.tags }).exec();
+    return Image.updateOne({ _id: image["_id"] }, { codes: image.codes }).exec();
   }
 
   Count(filter) {

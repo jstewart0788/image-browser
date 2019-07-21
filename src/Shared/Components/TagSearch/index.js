@@ -15,7 +15,9 @@ class TagSearch extends PureComponent {
   }
 
   async onSelect(tag) {
-    const { tags: {allIds} } = this.props;
+    const {
+      tags: { allIds }
+    } = this.props;
     this.props.handleSelection(tag);
     this.setState({
       dataSource: allIds.slice(0, 10),
@@ -24,7 +26,9 @@ class TagSearch extends PureComponent {
   }
 
   handleSearch(input) {
-    const { tags: {allIds} } = this.props;
+    const {
+      tags: { allIds }
+    } = this.props;
     this.setState({
       value: input,
       dataSource: allIds
@@ -34,25 +38,27 @@ class TagSearch extends PureComponent {
   }
 
   render() {
-    const { placeholder } = this.props;
+    const { placeholder, size = "large", showIcon } = this.props;
     const { dataSource, value } = this.state;
     return (
       <div className="filter-wrapper">
         <AutoComplete
           value={value}
-          size="large"
           style={{ width: "100%" }}
           onSelect={this.onSelect}
           onSearch={this.handleSearch}
           dataSource={dataSource}
           className="filter"
           placeholder={placeholder}
+          size={size}
         >
           <Input
             suffix={
-              <Button className="search-btn" size="large" type="primary">
-                <Icon type="search" />
-              </Button>
+              showIcon && (
+                <Button className="search-btn" size="large" type="primary">
+                  <Icon type="search" />
+                </Button>
+              )
             }
           />
         </AutoComplete>

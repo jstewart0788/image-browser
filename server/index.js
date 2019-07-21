@@ -24,8 +24,8 @@ const baseRoute = "/api/v1";
 //Middleware
 app
   .use(logger("dev"))
-  .use(bodyParser.json())
-  .use(bodyParser.urlencoded({ extended: false }))
+  .use(bodyParser.json({limit: '50mb'}))
+  .use(bodyParser.urlencoded({limit: '50mb', extended: true}))
   .use(cookieParser(process.env.COOKIE_SECRET))
   .use(cookieEncrypter(process.env.COOKIE_SECRET));
 

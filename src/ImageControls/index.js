@@ -41,6 +41,7 @@ class Inspector extends PureComponent {
         <TagSearch
           placeholder="Filter Images"
           handleSelection={this.handleSelection}
+          showIcon
         />
         <div className="clear-btn-wrapper">
           {filter.map(item => (
