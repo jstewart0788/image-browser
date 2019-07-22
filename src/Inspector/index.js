@@ -12,10 +12,10 @@ import {
   Col,
   Comment,
   List,
-  Tooltip
+  Tooltip,
+  Popover
 } from "antd";
 import _ from "lodash";
-import Dictionary from "../Shared/Dictionary";
 import { updateOneAsync } from "../Store/Images";
 import { postMessageAsync } from "../Store/Messages";
 import { arrayBufferToBase64 } from "../Shared/Utility/buffer";
@@ -90,7 +90,7 @@ class Inspector extends PureComponent {
 
   componentDidUpdate(prevProps) {
     const { selectedImage } = this.props;
-    if (prevProps.selectedImage != selectedImage && selectedImage) {
+    if (prevProps.selectedImage !== selectedImage && selectedImage) {
       const base64Flag = `data:${selectedImage.img.contentType};base64,`;
       const imageStr = arrayBufferToBase64(selectedImage.img.data.data);
       this.setState({ imageSrc: base64Flag + imageStr });
@@ -152,8 +152,19 @@ class Inspector extends PureComponent {
     });
   };
 
+  FilterList = lists =>
+    lists.length > 0 ? (
+      <div>
+        {lists.map(list => (
+          <p>{list}</p>
+        ))}
+      </div>
+    ) : (
+      <div> No Lists Available </div>
+    );
+
   render() {
-    const { selectedImage, open, content } = this.props;
+    const { selectedImage, open, content, lists, tags } = this.props;
     const { mode, imageSrc, value, submitting } = this.state;
 
     return selectedImage ? (
@@ -170,11 +181,23 @@ class Inspector extends PureComponent {
             src={imageSrc}
             alt={selectedImage.name}
           />
-          <h1>{selectedImage.name}</h1>
+          <div className="container">
+            <span className="stretch" />
+            <h1>{selectedImage.name}</h1>
+            <Popover
+              placement="bottom"
+              content={this.FilterList(lists)}
+              title="Choose list to add image"
+            >
+              <Button style={{ marginTop: 5 }} shape="circle" icon="right" />
+            </Popover>
+            <span className="stretch" />
+          </div>
+          {console.log(tags)}
           <ul>
-            {selectedImage.codes.map((tag, i) => (
+            { selectedImage.codes.map((tag, i) => (
               <li key={`${tag}-${i}`}>
-                {tag} - <span className="tag-desc"> {Dictionary[tag]} </span>
+                {tag} - <span className="tag-desc"> {tags[tag] && tags[tag].description} </span>
                 {mode === MODES.DELETE_TAG && (
                   <Button
                     size="small"
@@ -254,7 +277,9 @@ class Inspector extends PureComponent {
 export default connect(
   state => ({
     selectedImage: state.images.selectedImage,
-    content: state.messages.content
+    content: state.messages.content,
+    lists: state.lists.options,
+    tags:  state.tags.tags.byIds
   }),
   { updateOneAsync, postMessageAsync }
 )(Inspector);

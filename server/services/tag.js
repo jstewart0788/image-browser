@@ -5,6 +5,13 @@ module.exports = class TagServcie {
     return Tag.find({}).exec();
   }
 
+  insertOne(req, res) {
+    const { code, desc } = req.body;
+    Tag.create({ code, description: desc }, (err, data) => {
+      if (err) res.status(500).json({ msg: "Failed to create message" });
+      else res.json(data);
+    });
+  }
   async getIdsByCode(name) {
     return await Tag.findOne({ name }).exec();
   }

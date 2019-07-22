@@ -7,7 +7,7 @@ import globalReducers from "./Global";
 import { imageReducers } from "./Images";
 import { tagReducers } from "./Tags";
 import { messageReducers } from "./Messages";
-
+import { listReducers } from "./Lists";
 
 export const history = createBrowserHistory();
 
@@ -16,6 +16,7 @@ const rootReducer = combineReducers({
   images: imageReducers,
   tags: tagReducers,
   messages: messageReducers,
+  lists: listReducers,
   router: connectRouter(history)
 });
 

@@ -126,7 +126,9 @@ class Uploader extends PureComponent {
                 theme={imagesSuccess && "twoTone"}
                 twoToneColor="#52c41a"
               />
-              <span className={imagesSuccess && "success"}>Attatch Images</span>
+              <span className={imagesSuccess ? "success" : ""}>
+                Attatch Images
+              </span>
             </label>
             <label htmlFor="meta-uploader" className="uploader-icon noselect">
               <Icon
@@ -134,7 +136,7 @@ class Uploader extends PureComponent {
                 theme={metaSuccess && "twoTone"}
                 twoToneColor="#52c41a"
               />
-              <span className={metaSuccess && "success"}>Attatch Meta</span>
+              <span className={metaSuccess ? "success" : ""}>Attatch Meta</span>
             </label>
           </div>
           <div className="confirmation">

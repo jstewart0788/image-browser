@@ -10,6 +10,8 @@ import { fetchAllTags } from "../Store/Tags";
 import { getMessagesForImage } from "../Store/Messages";
 import Inspector from "../Inspector";
 import Uploader from "../Uploader";
+import ListModal from "../ListModal";
+import TagModal from "../TagModal";
 import ImageControls from "../ImageControls";
 import { arrayBufferToBase64 } from "../Shared/Utility/buffer";
 
@@ -95,6 +97,8 @@ class Home extends PureComponent {
         </div>
         <Inspector open={this.state.modal} toggleModal={this.toggleModal} />
         <Uploader />
+        <ListModal />
+        <TagModal />
       </div>
     );
   }
