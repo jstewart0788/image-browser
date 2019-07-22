@@ -2,7 +2,7 @@ const Tag = require("../services/tag");
 const dic = require("../init/dictionary");
 
 module.exports = class Images {
-  static init(baseRoute, app, mongoose) {
+  static init(baseRoute, app) {
     const tag = new Tag();
 
     app.get(`${baseRoute}/tag`, async (req, res, next) => {

@@ -7,6 +7,7 @@ import {
   selectImage
 } from "../Store/Images";
 import { fetchAllTags } from "../Store/Tags";
+import { getMessagesForImage } from "../Store/Messages";
 import Inspector from "../Inspector";
 import Uploader from "../Uploader";
 import ImageControls from "../ImageControls";
@@ -33,6 +34,7 @@ class Home extends PureComponent {
 
   async selectImage(image) {
     await this.props.selectImage(image);
+    await this.props.getMessagesForImage(image._id);
     this.toggleModal();
   }
 
@@ -102,5 +104,11 @@ export default connect(
   state => ({
     images: state.images.images
   }),
-  { fetchAllImages, selectImage, fetchNumberOfImages, fetchAllTags }
+  {
+    fetchAllImages,
+    selectImage,
+    fetchNumberOfImages,
+    fetchAllTags,
+    getMessagesForImage
+  }
 )(Home);

@@ -1,19 +1,75 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { Modal, Button, Icon, Input, Row, Col } from "antd";
+import moment from "moment";
+import {
+  Avatar,
+  Modal,
+  Button,
+  Input,
+  Form,
+  Icon,
+  Row,
+  Col,
+  Comment,
+  List,
+  Tooltip
+} from "antd";
 import _ from "lodash";
 import Dictionary from "../Shared/Dictionary";
 import { updateOneAsync } from "../Store/Images";
+import { postMessageAsync } from "../Store/Messages";
 import { arrayBufferToBase64 } from "../Shared/Utility/buffer";
 import TagSearch from "../Shared/Components/TagSearch";
 
 import "./styles.scss";
 
+const { TextArea } = Input;
+
+const CommentList = ({ comments }) => {
+  const data = comments.map(comment => ({
+    author: comment.postedBy,
+    avatar: <Avatar size="small" icon="user" />,
+    content: comment.content,
+    datetime: (
+      <Tooltip title={moment(comment.createdAt).format("YYYY-MM-DD HH:mm:ss")}>
+        <span>{moment(comment.createdAt).fromNow()}</span>
+      </Tooltip>
+    )
+  }));
+  return (
+    <List
+      dataSource={data}
+      header={`${comments.length} ${
+        comments.length > 1 ? "comments" : "comment"
+      }`}
+      itemLayout="horizontal"
+      renderItem={props => <Comment {...props} />}
+    />
+  );
+};
+
+const Editor = ({ onChange, onSubmit, submitting, value }) => (
+  <div>
+    <Form.Item>
+      <TextArea rows={4} onChange={onChange} value={value} />
+    </Form.Item>
+    <Form.Item>
+      <Button
+        htmlType="submit"
+        loading={submitting}
+        onClick={onSubmit}
+        type="primary"
+      >
+        Add Comment
+      </Button>
+    </Form.Item>
+  </div>
+);
+
 const MODES = {
   DEFAULT: "default",
   NEW_TAG: "new",
-  DELETE_TAG: "delete",
-  CUSTOM_MESSAGE: "custom"
+  DELETE_TAG: "delete"
 };
 
 class Inspector extends PureComponent {
@@ -21,11 +77,15 @@ class Inspector extends PureComponent {
     super(props);
     this.state = {
       mode: MODES.DEFAULT,
-      imageSrc: null
+      imageSrc: null,
+      submitting: false,
+      value: ""
     };
     this.removeTag = this.removeTag.bind(this);
     this.toggleModalMeta = this.toggleModalMeta.bind(this);
     this.handleAddTag = this.handleAddTag.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -60,9 +120,41 @@ class Inspector extends PureComponent {
     this.props.updateOneAsync(newImage);
   }
 
+  handleSubmit = () => {
+    const { selectedImage } = this.props;
+    const { value } = this.state;
+    if (!value || !selectedImage) {
+      return;
+    }
+
+    this.setState({
+      submitting: true
+    });
+    this.props
+      .postMessageAsync({ id: selectedImage._id, content: value })
+      .then(() => {
+        this.setState({
+          submitting: false,
+          value: ""
+        });
+      })
+      .catch(() => {
+        this.setState({
+          submitting: false,
+          value: ""
+        });
+      });
+  };
+
+  handleChange = e => {
+    this.setState({
+      value: e.target.value
+    });
+  };
+
   render() {
-    const { selectedImage, open } = this.props;
-    const { mode, imageSrc } = this.state;
+    const { selectedImage, open, content } = this.props;
+    const { mode, imageSrc, value, submitting } = this.state;
 
     return selectedImage ? (
       <Modal
@@ -121,12 +213,6 @@ class Inspector extends PureComponent {
                 </Button>
                 <Button
                   size="small"
-                  onClick={this.setMode.bind(null, MODES.CUSTOM_MESSAGE)}
-                >
-                  Add custom description <Icon type="edit" />
-                </Button>
-                <Button
-                  size="small"
                   type="danger"
                   onClick={this.setMode.bind(null, MODES.DELETE_TAG)}
                 >
@@ -144,6 +230,21 @@ class Inspector extends PureComponent {
               </Button>
             )}
           </div>
+          <div className="message-box">
+            <div>
+              {content.length > 0 && <CommentList comments={content} />}
+              <Comment
+                content={
+                  <Editor
+                    onChange={this.handleChange}
+                    onSubmit={this.handleSubmit}
+                    submitting={submitting}
+                    value={value}
+                  />
+                }
+              />
+            </div>
+          </div>
         </div>
       </Modal>
     ) : null;
@@ -152,7 +253,8 @@ class Inspector extends PureComponent {
 
 export default connect(
   state => ({
-    selectedImage: state.images.selectedImage
+    selectedImage: state.images.selectedImage,
+    content: state.messages.content
   }),
-  { updateOneAsync }
+  { updateOneAsync, postMessageAsync }
 )(Inspector);

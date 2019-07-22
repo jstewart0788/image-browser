@@ -6,6 +6,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import globalReducers from "./Global";
 import { imageReducers } from "./Images";
 import { tagReducers } from "./Tags";
+import { messageReducers } from "./Messages";
 
 
 export const history = createBrowserHistory();
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   global: globalReducers,
   images: imageReducers,
   tags: tagReducers,
+  messages: messageReducers,
   router: connectRouter(history)
 });
 

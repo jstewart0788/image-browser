@@ -16,6 +16,7 @@ body {
 #root {
   min-height: 100%;
 }
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -40,3 +41,8 @@ code {
   user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
 }
+
+/* .ant-modal{
+   top: 50px !important; 
+  overflow: hidden;
+} */
