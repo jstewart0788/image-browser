@@ -6,6 +6,7 @@ const defaultState = {
   images: [],
   count: 0,
   filter: [],
+  listFilter: null,
   uploaderOpen: false
 };
 
@@ -15,6 +16,7 @@ export const setImages = createAction(`${base}SET_IMAGES`);
 export const setCount = createAction(`${base}SET_COUNT`);
 export const selectImage = createAction(`${base}SELECT_IMAGE`);
 export const setFilter = createAction(`${base}SET_FILTER`);
+export const setListFilter = createAction(`${base}SET_LIST_FILTER`);
 export const setImage = createAction(`${base}SET_FILTER`);
 export const updateOne = createAction(`${base}UPDATE_ONE`);
 export const toggleUploader = createAction(`${base}TOGGLE_UPLOADER`);
@@ -37,6 +39,10 @@ export const imageReducers = handleActions(
       ...state,
       filter: payload
     }),
+    [setListFilter]: (state, { payload }) => ({
+      ...state,
+      listFilter: payload
+    }),
     [updateOne]: (state, { payload }) => ({
       ...state,
       selectedImage: payload
@@ -51,18 +57,33 @@ export const imageReducers = handleActions(
 
 export const fetchAllImages = (page = 1) => (dispatch, getState) => {
   const {
-    images: { filter }
+    images: { filter, listFilter }
   } = getState();
-  return fetch(`api/v1/image?page=${page}${filter ? `&filter=${filter}` : ""}`)
+  console.log(filter.length > 0);
+  return fetch(
+    `api/v1/image?page=${page}${
+      listFilter && listFilter.images.length > 0
+        ? `&listFilter=${listFilter.images}`
+        : ""
+    }${filter.length > 0 ? `&filter=${filter}` : ""}`
+  )
     .then(({ data }) => dispatch(setImages(data)))
     .catch(err => errorHandler(err));
 };
 
 export const fetchNumberOfImages = () => (dispatch, getState) => {
   const {
-    images: { filter }
+    images: { filter, listFilter }
   } = getState();
-  return fetch(`api/v1/image?count=1${filter ? `&filter=${filter}` : ""}`)
+  console.log(filter.length > 0);
+
+  return fetch(
+    `api/v1/image?count=1${
+      listFilter && listFilter.images.length > 0
+        ? `&listFilter=${listFilter.images}`
+        : ""
+    }${filter.length > 0 ? `&filter=${filter}` : ""}`
+  )
     .then(({ data: { count } }) => dispatch(setCount(count)))
     .catch(err => errorHandler(err));
 };

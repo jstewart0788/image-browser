@@ -11,6 +11,7 @@ const base = "LISTS/";
 export const setLists = createAction(`${base}SET_LISTS`);
 export const postList = createAction(`${base}POST_LIST`);
 export const toggleModal = createAction(`${base}TOGGLE_MODAL`);
+export const addImageToList = createAction(`${base}ADD_IMAGE_TO_LIST`);
 
 export const listReducers = handleActions(
   {
@@ -25,6 +26,14 @@ export const listReducers = handleActions(
     [toggleModal]: state => ({
       ...state,
       modalOpen: !state.modalOpen
+    }),
+    [addImageToList]: (state, { payload }) => ({
+      ...state,
+      options: state.options.map(item => {
+        if (item.name === payload.name)
+          return { ...item, images: payload.images };
+        else return item;
+      })
     })
   },
   defaultState
@@ -44,8 +53,8 @@ export const postListAsync = body => dispatch => {
     .catch(err => errorHandler(err));
 };
 
-export const addImageToList = body => () => {
-  return fetch(`api/v1/list`, restVerbs.PUT, body).catch(err =>
-    errorHandler(err)
-  );
+export const addImageToListAsync = body => dispatch => {
+  return fetch(`api/v1/list`, restVerbs.PUT, body)
+    .then(() => dispatch(addImageToList(body)))
+    .catch(err => errorHandler(err));
 };

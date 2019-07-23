@@ -38,7 +38,12 @@ class TagSearch extends PureComponent {
   }
 
   render() {
-    const { placeholder, size = "large", showIcon } = this.props;
+    const {
+      placeholder,
+      size = "large",
+      showIcon,
+      disabled = false
+    } = this.props;
     const { dataSource, value } = this.state;
     return (
       <div className="filter-wrapper">
@@ -51,6 +56,7 @@ class TagSearch extends PureComponent {
           className="filter"
           placeholder={placeholder}
           size={size}
+          disabled={disabled}
         >
           <Input
             suffix={

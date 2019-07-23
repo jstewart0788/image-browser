@@ -7,7 +7,7 @@ module.exports = class Images {
   static init(baseRoute, app) {
     const image = new Image();
     app.get(`${baseRoute}/image`, async (req, res, next) => {
-      const { name, page, count, filter } = req.query;
+      const { name, page, count, filter, listFilter } = req.query;
       if (name) {
         image
           .fetchOne(name)
@@ -17,7 +17,7 @@ module.exports = class Images {
           .catch(next);
       } else if (page) {
         image
-          .fetchAll(page, filter)
+          .fetchAll(page, filter, listFilter)
           .then(images => {
             res.json(images);
           })

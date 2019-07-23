@@ -18,7 +18,7 @@ import {
 import _ from "lodash";
 import { updateOneAsync } from "../Store/Images";
 import { postMessageAsync } from "../Store/Messages";
-import { addImageToList } from "../Store/Lists";
+import { addImageToListAsync } from "../Store/Lists";
 import { arrayBufferToBase64 } from "../Shared/Utility/buffer";
 import TagSearch from "../Shared/Components/TagSearch";
 
@@ -107,7 +107,7 @@ class Inspector extends PureComponent {
       this.togglePopover();
       return;
     }
-    this.props.addImageToList({ name: name, images: [...images, imageId] });
+    this.props.addImageToListAsync({ name: name, images: [...images, imageId] });
     this.togglePopover();
   }
 
@@ -314,5 +314,5 @@ export default connect(
     lists: state.lists.options,
     tags: state.tags.tags.byIds
   }),
-  { updateOneAsync, postMessageAsync, addImageToList }
+  { updateOneAsync, postMessageAsync, addImageToListAsync }
 )(Inspector);

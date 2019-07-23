@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const AdmZip = require("adm-zip");
+const mongoose = require("mongoose");
 const util = require("util");
 const Tag = require("./tag");
 const Image = require("../models/imagesv2");
@@ -13,9 +14,19 @@ module.exports = class ImageService {
   constructor() {
     this.tag = new Tag();
   }
-
-  fetchAll(page, filter) {
-    const queryFilter = filter ? { codes: filter } : null;
+  fetchAll(page, filter, listFilter) {
+    let queryFilter = {};
+    const listQuery = listFilter ? listFilter.split(",") : null;
+    if (filter) queryFilter.codes = filter;
+    if (listQuery)
+      queryFilter = {
+        ...queryFilter,
+        _id: {
+          $in: listQuery.map(list => {
+            return mongoose.Types.ObjectId(list);
+          })
+        }
+      };
     return Image.find(queryFilter, null, {
       sort: "-createdOn",
       limit: 20,
@@ -28,7 +39,10 @@ module.exports = class ImageService {
   }
 
   updateOne(image) {
-    return Image.updateOne({ _id: image["_id"] }, { codes: image.codes }).exec();
+    return Image.updateOne(
+      { _id: image["_id"] },
+      { codes: image.codes }
+    ).exec();
   }
 
   Count(filter) {
@@ -92,10 +106,14 @@ module.exports = class ImageService {
             Image.insertMany(images, (err, doc) => {
               if (err) {
                 res.status(500).json({ msg: "Problem inserting images!" });
-                rimraf("uploads", () => console.log("Deleted uploads directory"));
+                rimraf("uploads", () =>
+                  console.log("Deleted uploads directory")
+                );
               } else {
                 res.json({ msg: "Sucessfully inserted images!" });
-                rimraf("uploads", () => console.log("Deleted uploads directory"));
+                rimraf("uploads", () =>
+                  console.log("Deleted uploads directory")
+                );
               }
             });
           })
