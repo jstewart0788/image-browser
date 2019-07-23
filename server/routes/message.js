@@ -6,7 +6,6 @@ module.exports = class Images {
 
     app.get(`${baseRoute}/message`, async (req, res, next) => {
       const { id } = req.query;
-      console.log(req.query)
       message
         .getMessagesForImage(id)
         .then(messages => {

@@ -2,7 +2,6 @@ const Message = require("../models/message");
 
 module.exports = class MessageServcie {
   getMessagesForImage(imageId) {
-    console.log(imageId)
     return Message.find({ imageId }).exec();
   }
 

@@ -17,8 +17,8 @@ class ListModal extends PureComponent {
     this.handleCancel = this.handleCancel.bind(this);
   }
 
-  handleSubmit(body) {
-    this.props.postListAsync(body);
+  handleSubmit() {
+    this.props.postListAsync({ name: this.state.value });
     this.setState({ value: "" });
     this.handleCancel();
   }

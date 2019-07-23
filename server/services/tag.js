@@ -8,7 +8,7 @@ module.exports = class TagServcie {
   insertOne(req, res) {
     const { code, desc } = req.body;
     Tag.create({ code, description: desc }, (err, data) => {
-      if (err) res.status(500).json({ msg: "Failed to create message" });
+      if (err) res.status(500).json({ msg: "Failed to create tag" });
       else res.json(data);
     });
   }

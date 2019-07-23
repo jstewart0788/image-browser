@@ -8,6 +8,7 @@ import {
 } from "../Store/Images";
 import { fetchAllTags } from "../Store/Tags";
 import { getMessagesForImage } from "../Store/Messages";
+import { getUsersLists } from "../Store/Lists";
 import Inspector from "../Inspector";
 import Uploader from "../Uploader";
 import ListModal from "../ListModal";
@@ -32,6 +33,7 @@ class Home extends PureComponent {
     this.props.fetchAllImages();
     this.props.fetchNumberOfImages();
     this.props.fetchAllTags();
+    this.props.getUsersLists();
   }
 
   async selectImage(image) {
@@ -113,6 +115,7 @@ export default connect(
     selectImage,
     fetchNumberOfImages,
     fetchAllTags,
+    getUsersLists,
     getMessagesForImage
   }
 )(Home);

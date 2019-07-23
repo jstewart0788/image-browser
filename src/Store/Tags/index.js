@@ -34,11 +34,10 @@ export const tagReducers = handleActions(
     [postTag]: (state, { payload }) => ({
       ...state,
       tags: {
-        byIds: { ...state.tags.byIds, [payload.id]: payload },
-        allIds: [...state.tags.allIds, payload.id]
+        byIds: { ...state.tags.byIds, [payload.code]: payload },
+        allIds: [...state.tags.allIds, payload.code]
       }
-    })
-    ,
+    }),
     [toggleModal]: state => ({
       ...state,
       modalOpen: !state.modalOpen

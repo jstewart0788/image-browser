@@ -41,7 +41,6 @@ class Uploader extends PureComponent {
 
   handleMetaUploaderChange(e) {
     const metaFile = e.target.files[0];
-    console.log(metaFile);
     if (metaFile)
       this.setState({
         metaFile,

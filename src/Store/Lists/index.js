@@ -9,7 +9,7 @@ const defaultState = {
 const base = "LISTS/";
 
 export const setLists = createAction(`${base}SET_LISTS`);
-export const postList = createAction(`${base}POST_MESSAGE`);
+export const postList = createAction(`${base}POST_LIST`);
 export const toggleModal = createAction(`${base}TOGGLE_MODAL`);
 
 export const listReducers = handleActions(
@@ -20,7 +20,7 @@ export const listReducers = handleActions(
     }),
     [postList]: (state, { payload }) => ({
       ...state,
-      options: [...state.lists, payload]
+      options: [...state.options, payload]
     }),
     [toggleModal]: state => ({
       ...state,
@@ -31,14 +31,18 @@ export const listReducers = handleActions(
 );
 
 export const getUsersLists = id => dispatch => {
-  return fetch(`api/v1/list?userId=${id}`)
+  return fetch(`api/v1/list`)
     .then(({ data }) => dispatch(setLists(data)))
     .catch(err => errorHandler(err));
 };
 
 export const postListAsync = body => dispatch => {
+  console.log("hit");
   return fetch(`api/v1/list`, restVerbs.POST, body)
-    .then(({ data }) => dispatch(postList(data)))
+    .then(({ data }) => {
+      console.log(data);
+      dispatch(postList(data));
+    })
     .catch(err => errorHandler(err));
 };
 

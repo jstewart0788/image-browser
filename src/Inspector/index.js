@@ -155,8 +155,8 @@ class Inspector extends PureComponent {
   FilterList = lists =>
     lists.length > 0 ? (
       <div>
-        {lists.map(list => (
-          <p>{list}</p>
+        {lists.map(({name}, i) => (
+          <p key={`${name}-${i}`}>{name}</p>
         ))}
       </div>
     ) : (
@@ -193,11 +193,14 @@ class Inspector extends PureComponent {
             </Popover>
             <span className="stretch" />
           </div>
-          {console.log(tags)}
           <ul>
-            { selectedImage.codes.map((tag, i) => (
+            {selectedImage.codes.map((tag, i) => (
               <li key={`${tag}-${i}`}>
-                {tag} - <span className="tag-desc"> {tags[tag] && tags[tag].description} </span>
+                {tag} -{" "}
+                <span className="tag-desc">
+                  {" "}
+                  {tags[tag] && tags[tag].description}{" "}
+                </span>
                 {mode === MODES.DELETE_TAG && (
                   <Button
                     size="small"
@@ -279,7 +282,7 @@ export default connect(
     selectedImage: state.images.selectedImage,
     content: state.messages.content,
     lists: state.lists.options,
-    tags:  state.tags.tags.byIds
+    tags: state.tags.tags.byIds
   }),
   { updateOneAsync, postMessageAsync }
 )(Inspector);
