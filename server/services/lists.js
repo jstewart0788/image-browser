@@ -5,8 +5,8 @@ module.exports = class ListServcie {
     return List.find({ createdBy: user }).exec();
   }
 
-  addImageToList() {
-    return true;
+  addImageToList(name, images) {
+    return List.updateOne({ name }, { images }).exec();
   }
 
   createOne(req, res) {

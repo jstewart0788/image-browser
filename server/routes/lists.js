@@ -8,8 +8,8 @@ module.exports = class Images {
       const { userName } = req.user;
       list
         .fetchAllUsersLists(userName)
-        .then(tags => {
-          res.json(tags);
+        .then(lists => {
+          res.json(lists);
         })
         .catch(() => {
           res.status(500).json({ msg: "Failed to retrive lists" });
@@ -18,6 +18,18 @@ module.exports = class Images {
 
     app.post(`${baseRoute}/list`, async (req, res) => {
       list.createOne(req, res);
+    });
+
+    app.put(`${baseRoute}/list`, async (req, res) => {
+      const { name, images } = req.body;
+      list
+        .addImageToList(name, images)
+        .then(lists => {
+          res.json({ msg: "Succesfully added image to lists" });
+        })
+        .catch(() => {
+          res.status(500).json({ msg: "Failed to add image to lists" });
+        });
     });
   }
 };

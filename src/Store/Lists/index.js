@@ -37,10 +37,8 @@ export const getUsersLists = id => dispatch => {
 };
 
 export const postListAsync = body => dispatch => {
-  console.log("hit");
   return fetch(`api/v1/list`, restVerbs.POST, body)
     .then(({ data }) => {
-      console.log(data);
       dispatch(postList(data));
     })
     .catch(err => errorHandler(err));

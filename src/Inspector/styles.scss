@@ -21,3 +21,13 @@
   max-width: 100%;
   max-height: 425px;
 }
+
+.filter-list {
+  .list-item {
+    &:hover {
+      background: #1890ff;
+      color: white;
+      cursor: pointer;
+    }
+  }
+}

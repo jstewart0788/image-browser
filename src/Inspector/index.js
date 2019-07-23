@@ -18,6 +18,7 @@ import {
 import _ from "lodash";
 import { updateOneAsync } from "../Store/Images";
 import { postMessageAsync } from "../Store/Messages";
+import { addImageToList } from "../Store/Lists";
 import { arrayBufferToBase64 } from "../Shared/Utility/buffer";
 import TagSearch from "../Shared/Components/TagSearch";
 
@@ -76,16 +77,19 @@ class Inspector extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      popoverVisible: false,
       mode: MODES.DEFAULT,
       imageSrc: null,
       submitting: false,
       value: ""
     };
+    this.addImageToLists = this.addImageToLists.bind(this);
     this.removeTag = this.removeTag.bind(this);
     this.toggleModalMeta = this.toggleModalMeta.bind(this);
     this.handleAddTag = this.handleAddTag.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.togglePopover = this.togglePopover.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -95,6 +99,16 @@ class Inspector extends PureComponent {
       const imageStr = arrayBufferToBase64(selectedImage.img.data.data);
       this.setState({ imageSrc: base64Flag + imageStr });
     }
+  }
+
+  addImageToLists({ name, images }) {
+    const imageId = this.props.selectedImage._id;
+    if (images.includes(imageId)) {
+      this.togglePopover();
+      return;
+    }
+    this.props.addImageToList({ name: name, images: [...images, imageId] });
+    this.togglePopover();
   }
 
   setMode = mode => {
@@ -111,7 +125,7 @@ class Inspector extends PureComponent {
 
   toggleModalMeta() {
     this.props.toggleModal();
-    this.setState({ mode: MODES.DEFAULT });
+    this.setState({ mode: MODES.DEFAULT, popoverVisible: false });
   }
 
   handleAddTag(tag) {
@@ -152,11 +166,21 @@ class Inspector extends PureComponent {
     });
   };
 
+  togglePopover() {
+    this.setState(state => ({ popoverVisible: !state.popoverVisible }));
+  }
+
   FilterList = lists =>
     lists.length > 0 ? (
-      <div>
-        {lists.map(({name}, i) => (
-          <p key={`${name}-${i}`}>{name}</p>
+      <div className="filter-list">
+        {lists.map(({ name, images }, i) => (
+          <p
+            className="list-item"
+            key={`${name}-${i}`}
+            onClick={this.addImageToLists.bind(null, { name, images })}
+          >
+            {name}
+          </p>
         ))}
       </div>
     ) : (
@@ -165,7 +189,7 @@ class Inspector extends PureComponent {
 
   render() {
     const { selectedImage, open, content, lists, tags } = this.props;
-    const { mode, imageSrc, value, submitting } = this.state;
+    const { mode, imageSrc, value, submitting, popoverVisible } = this.state;
 
     return selectedImage ? (
       <Modal
@@ -185,11 +209,17 @@ class Inspector extends PureComponent {
             <span className="stretch" />
             <h1>{selectedImage.name}</h1>
             <Popover
+              visible={popoverVisible}
               placement="bottom"
               content={this.FilterList(lists)}
               title="Choose list to add image"
             >
-              <Button style={{ marginTop: 5 }} shape="circle" icon="right" />
+              <Button
+                style={{ marginTop: 5 }}
+                shape="circle"
+                icon="right"
+                onClick={this.togglePopover}
+              />
             </Popover>
             <span className="stretch" />
           </div>
@@ -284,5 +314,5 @@ export default connect(
     lists: state.lists.options,
     tags: state.tags.tags.byIds
   }),
-  { updateOneAsync, postMessageAsync }
+  { updateOneAsync, postMessageAsync, addImageToList }
 )(Inspector);
